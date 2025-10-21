@@ -4,7 +4,7 @@ using MinimalApiProject.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Database file name must contain duo names separated by underscore: ViniciusBueno_LuANA_VICENTE.db
+
 var dbFileName = "ViniciusBueno_LuANA_VICENTE.db";
 var connectionString = $"Data Source={dbFileName}";
 
@@ -13,7 +13,6 @@ builder.Services.AddDbContext<ConsumoContext>(options =>
 
 var app = builder.Build();
 
-// Ensure database created
 using (var scope = app.Services.CreateScope())
 {
 	var db = scope.ServiceProvider.GetRequiredService<ConsumoContext>();
@@ -22,7 +21,6 @@ using (var scope = app.Services.CreateScope())
 
 app.MapPost("/api/consumo/cadastrar", async (Consumo consumo, ConsumoContext db) =>
 {
-	// Validations
 	if (consumo.Mes < 1 || consumo.Mes > 12)
 		return Results.BadRequest("Mes deve estar entre 1 e 12.");
 	if (consumo.Ano < 2000)
@@ -30,15 +28,12 @@ app.MapPost("/api/consumo/cadastrar", async (Consumo consumo, ConsumoContext db)
 	if (consumo.M3Consumidos <= 0)
 		return Results.BadRequest("m3Consumidos deve ser > 0.");
 
-	// Check duplicate
 	var exists = await db.Consumos.AnyAsync(c => c.Cpf == consumo.Cpf && c.Mes == consumo.Mes && c.Ano == consumo.Ano);
 	if (exists)
 		return Results.Conflict("Leitura já cadastrada para este CPF, mês e ano.");
 
-	// Calculations
 	consumo.ConsumoFaturado = consumo.M3Consumidos < 10 ? 10 : consumo.M3Consumidos;
 
-	// Tarifa por faixa (única tarifa aplicada sobre todo o consumoFaturado)
 	double tarifa;
 	var cf = consumo.ConsumoFaturado;
 	if (cf <= 10) tarifa = 2.50;
@@ -49,12 +44,12 @@ app.MapPost("/api/consumo/cadastrar", async (Consumo consumo, ConsumoContext db)
 
 	consumo.ValorAgua = consumo.ConsumoFaturado * consumo.Tarifa;
 
-	// Bandeira
+	
 	var bandeira = (consumo.Bandeira ?? "Verde").ToLower();
 	double adicionalPercent = 0;
 	if (bandeira.Contains("amarela")) adicionalPercent = 0.10;
 	else if (bandeira.Contains("vermelha")) adicionalPercent = 0.20;
-	else adicionalPercent = 0.0; // Verde or unknown -> 0
+	else adicionalPercent = 0.0; 
 
 	consumo.AdicionalBandeira = consumo.ValorAgua * adicionalPercent;
 

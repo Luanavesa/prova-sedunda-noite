@@ -20,7 +20,6 @@ public class Consumo
     [Range(0.0000001, double.MaxValue)]
     public double M3Consumidos { get; set; }
 
-    // Calculated fields - stored in DB
     public double ConsumoFaturado { get; set; }
     public double Tarifa { get; set; }
     public double ValorAgua { get; set; }
@@ -28,7 +27,6 @@ public class Consumo
     public double TaxaEsgoto { get; set; }
     public double Total { get; set; }
 
-    // Input fields
     public string Bandeira { get; set; } = "Verde";
     public bool PossuiEsgoto { get; set; }
 }
