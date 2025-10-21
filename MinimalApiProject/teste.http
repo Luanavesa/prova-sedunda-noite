@@ -1,0 +1,58 @@
+@baseUrl = http://localhost:5157
+
+### 
+POST {{baseUrl}}/api/consumo/cadastrar
+Content-Type: application/json
+
+{
+  "cpf": "123.456.789-00",
+  "mes": 10,
+  "ano": 2025,
+  "m3Consumidos": 37.5,
+  "bandeira": "Vermelha",
+  "possuiEsgoto": true
+}
+
+### 
+POST {{baseUrl}}/api/consumo/cadastrar
+Content-Type: application/json
+
+{
+  "cpf": "111.222.333-44",
+  "mes": 13,
+  "ano": 2025,
+  "m3Consumidos": 20,
+  "bandeira": "Amarela",
+  "possuiEsgoto": false
+}
+
+### 
+POST {{baseUrl}}/api/consumo/cadastrar
+Content-Type: application/json
+
+{
+  "cpf": "123.456.789-00",
+  "mes": 10,
+  "ano": 2025,
+  "m3Consumidos": 15,
+  "bandeira": "Verde",
+  "possuiEsgoto": true
+}
+
+### 
+GET {{baseUrl}}/api/consumo/listar
+
+### 
+GET {{baseUrl}}/api/consumo/buscar/123.456.789-00/10/2025
+
+### 
+GET {{baseUrl}}/api/consumo/buscar/000.000.000-00/1/2024
+
+### 
+DELETE {{baseUrl}}/api/consumo/remover/123.456.789-00/10/2025
+
+### 
+DELETE {{baseUrl}}/api/consumo/remover/123.456.789-00/10/2025
+
+### 
+GET {{baseUrl}}/api/consumo/total-geral
